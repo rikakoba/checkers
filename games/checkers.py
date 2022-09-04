@@ -44,12 +44,12 @@ class Checker:
             if 0 <= self.i + d[1] < 8 and 0 <= self.g + d[0] < 8:
                 if field[self.i + d[1]][self.g + d[0]] == "-":
                     self.pos.append((self.i + d[1], self.g + d[0]))
-                elif field[self.i + d[1]][self.g + d[0]] == self.enemy:
+                elif field[self.i + d[1]][self.g + d[0]] == self.enemy or field[self.i + d[1]][self.g + d[0]] == self.enemy + "k":
                     check_kill(field, self.i, self.g, self.kill, self.enemy, (None, None), self.dict_kill, [])
 
 
 class Checker_king(Checker):
-    def check_kill(self, field, prev):
+    def check_kill(self, field, point, prev_list: list, prev):
         direction = [(-1, -1), (1, -1), (-1, 1), (1, 1)]
         try:
             direction.remove(prev)
@@ -57,13 +57,16 @@ class Checker_king(Checker):
             pass
         for d in direction:
             for i in range(1, 8):
-                if 0 <= self.i + d[0] * i < 8 and 0 <= self.g + d[1] * i < 8:
-                    if field[self.i + d[0] * i][self.g + d[1] * i] == self.enemy or field[self.i + d[0] * i][self.g + d[1] * i] == self.enemy + "k":
+                if 0 <= point[0] + d[0] * i < 8 and 0 <= point[1] + d[1] * i < 8:
+                    if field[point[0] + d[0] * i][point[1] + d[1] * i] == self.enemy or field[point[0] + d[0] * i][point[1] + d[1] * i] == self.enemy + "k":
                         for k in range(i + 1, 8):
-                            if 0 <= self.i + d[0] * k < 8 and 0 <= self.g + d[1] * k < 8:
-                                if field[self.i + d[0] * k][self.g + d[1] * k] != "-":
+                            if 0 <= point[0] + d[0] * k < 8 and 0 <= point[1] + d[1] * k < 8:
+                                if field[point[0] + d[0] * k][point[1] + d[1] * k] != "-":
                                     break
-                                self.dict_kill.setdefault((self.i + d[0] * k, self.g + d[1] * k), [(self.i + d[0] * i, self.g + d[1] * i)])
+                                prev_list.append((point[0] + d[0] * i, point[1] + d[1] * i))
+                                self.dict_kill.setdefault((point[0] + d[0] * k, point[1] + d[1] * k), prev_list.copy())
+                                self.check_kill(field, (point[0] + d[0] * k, point[1] + d[1] * k), prev_list, (-d[0], -d[1]))
+                                prev_list.remove((point[0] + d[0] * i, point[1] + d[1] * i))
 
     def check(self, field):
         self.pos.clear()
@@ -78,4 +81,4 @@ class Checker_king(Checker):
                     if field[self.i + d[1] * i][self.g + d[0] * i] == "-":
                         self.pos.append((self.i + d[1] * i, self.g + d[0] * i))
                 i += 1
-        self.check_kill(field, [])
+        self.check_kill(field, (self.i, self.g), [], [])
