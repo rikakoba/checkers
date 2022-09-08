@@ -5,15 +5,16 @@ def check_kill(field, i, g, kill, enemy, p, dict_kill: dict, prev: list):
     except:
         pass
     for d in direction:
-        if 0 <= i + d[1] < 8 and 0 <= g + d[0] < 8:
-            if field[i + d[1]][g + d[0]] == enemy or field[i + d[1]][g + d[0]] == enemy + "k":
-                if 0 <= i + d[1] * 2 < 8 and 0 <= g + d[0] * 2 < 8:
-                    if field[i + d[1] * 2][g + d[0] * 2] == "-":
-                        data = (i + d[1], g + d[0])
+        if 0 <= i + d[0] < 8 and 0 <= g + d[1] < 8:
+            if field[i + d[0]][g + d[1]] == enemy or field[i + d[0]][g + d[1]] == enemy + "k":
+                if 0 <= i + d[0] * 2 < 8 and 0 <= g + d[1] * 2 < 8:
+                    if field[i + d[0] * 2][g + d[1] * 2] == "-":
+                        data = (i + d[0], g + d[1])
+                        print(data)
                         prev.append(data)
-                        kill.append((i + d[1] * 2, g + d[0] * 2))
-                        dict_kill.setdefault((i + d[1] * 2, g + d[0] * 2), prev.copy())
-                        check_kill(field, i + d[1] * 2, g + d[0] * 2, kill, enemy, (d[0] * -1, d[1] * -1), dict_kill, prev)
+                        kill.append((i + d[0] * 2, g + d[1] * 2))
+                        dict_kill.setdefault((i + d[0] * 2, g + d[1] * 2), prev.copy())
+                        check_kill(field, i + d[0] * 2, g + d[1] * 2, kill, enemy, (d[0] * -1, d[1] * -1), dict_kill, prev)
                         prev.remove(data)
 
 
@@ -58,6 +59,8 @@ class Checker_king(Checker):
         for d in direction:
             for i in range(1, 8):
                 if 0 <= point[0] + d[0] * i < 8 and 0 <= point[1] + d[1] * i < 8:
+                    if field[point[0] + d[0] * i][point[1] + d[1] * i] == field[self.i][self.g] or field[point[0] + d[0] * i][point[1] + d[1] * i] == field[self.i][self.g].replace("k", ""):
+                        break
                     if field[point[0] + d[0] * i][point[1] + d[1] * i] == self.enemy or field[point[0] + d[0] * i][point[1] + d[1] * i] == self.enemy + "k":
                         for k in range(i + 1, 8):
                             if 0 <= point[0] + d[0] * k < 8 and 0 <= point[1] + d[1] * k < 8:
@@ -76,7 +79,7 @@ class Checker_king(Checker):
             i = 1
             while i <= 8:
                 if 0 <= self.i + d[1] * i < 8 and 0 <= self.g + d[0] * i < 8:
-                    if field[self.i + d[1] * i][self.g + d[0] * i] == self.enemy:
+                    if field[self.i + d[1] * i][self.g + d[0] * i] == self.enemy or field[self.i + d[1] * i][self.g + d[0] * i] == field[self.i][self.g] or field[self.i + d[1] * i][self.g + d[0] * i] == field[self.i][self.g].replace("k", ""):
                         break
                     if field[self.i + d[1] * i][self.g + d[0] * i] == "-":
                         self.pos.append((self.i + d[1] * i, self.g + d[0] * i))
