@@ -1,8 +1,8 @@
 import sys
 import time
-
 import pygame
 import random
+
 from config import *
 from checkers import *
 
@@ -119,12 +119,13 @@ def check_events():
                         kill_direction.clear()
                         current_checker.append(ch)
                         ch.check(pos)
-                        for p in ch.pos:
-                            possible_direction.append(p)
                         for p in ch.dict_kill:
                             kill_direction.append(p)
                         for p in ch.kill:
                             kill_direction.append(p)
+                        if not kill_direction:
+                            for p in ch.pos:
+                                possible_direction.append(p)
                         break
                 else:
                     possible_direction.clear()
