@@ -8,11 +8,17 @@ Usage:
 from setuptools import setup
 
 APP = ['checkers.py']
-DATA_FILES = ["images/"]
-OPTIONS = {}
+APP_NAME = "Checkers"
+DATA_FILES = [
+    ("images", ["images/*.png"])
+]
+OPTIONS = {
+    "argv_emulation": True
+}
 
 setup(
     app=APP,
+    name=APP_NAME,
     data_files=DATA_FILES,
     options={'py2app': OPTIONS},
     setup_requires=['py2app', "pygame"],
