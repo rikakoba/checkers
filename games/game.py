@@ -2,7 +2,6 @@ import sys
 import time
 import pygame
 import random
-
 from config import *
 from checkers import *
 
@@ -195,4 +194,5 @@ def main():
         update_screen()
 
 
-main()
+if __name__ == '__main__':
+    main()

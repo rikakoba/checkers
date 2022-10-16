@@ -58,9 +58,12 @@ class Checker_king(Checker):
         for d in direction:
             for i in range(1, 8):
                 if 0 <= point[0] + d[0] * i < 8 and 0 <= point[1] + d[1] * i < 8:
-                    if i == 1 and (field[point[0] + d[0] * i][point[1] + d[1] * i] == field[self.i][self.g]) or \
-                            field[point[0] + d[0] * i][point[1] + d[1] * i] == field[self.i][self.g].replace("k", ""):
-                        break
+                    if (field[point[0] + d[0] * i][point[1] + d[1] * i] == self.enemy or
+                            field[point[0] + d[0] * i][point[1] + d[1] * i] == self.enemy.replace("k", "")):
+                        if 0 <= point[0] + d[0] * (i + 1) < 8 and 0 <= point[1] + d[1] * (i + 1) < 8:
+                            if (field[point[0] + d[0] * (i + 1)][point[1] + d[1] * (i + 1)] == self.enemy or
+                                    field[point[0] + d[0] * (i + 1)][point[1] + d[1] * (i + 1)] == self.enemy.replace("k", "")):
+                                break
                     if field[point[0] + d[0] * i][point[1] + d[1] * i] == self.enemy or field[point[0] + d[0] * i][point[1] + d[1] * i] == self.enemy + "k":
                         if 0 <= point[0] + d[0] * (i + 1) < 8 and 0 <= point[1] + d[1] * (i + 1) < 8 and \
                                 field[point[0] + d[0] * (i + 1)][point[1] + d[1] * (i + 1)] == "-":
